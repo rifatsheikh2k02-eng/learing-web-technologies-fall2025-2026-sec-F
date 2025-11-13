@@ -1,0 +1,40 @@
+<html>
+<head>
+ 
+<body>
+  <h2>  Name </h2>
+
+  <form onsubmit="return Name();">
+    <label>Full Name:</label>
+    <input type="text" id="name">
+    <p id="error" style="color:red;"></p>
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    function Name() {
+      let name = document.getElementById("name").value.trim();
+      let error = document.getElementById("error");
+
+      if (name === "") {
+        error.innerHTML = " Name cannot be empty.";
+        return false;
+      }
+
+     
+        let pattern = /^[A-Za-z][A-Za-z.\-]*(\s+[A-Za-z][A-Za-z.\-]*)+$/;
+
+      if (!pattern.test(name)) {
+        error.innerHTML =
+          " Invalid name. Must start with a letter, contain at least two words, and use only letters, dot (.) or dash (-).";
+        return false;
+      }
+
+      // Valid
+      error.style.color = "green";
+      error.innerHTML = " Valid name!";
+      return false; 
+    }
+  </script>
+</body>
+</html>
