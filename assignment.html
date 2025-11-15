@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Person Profile</title>
+</head>
+<body>
+
+<h1>PERSON PROFILE</h1>
+
+<form onsubmit="return validateForm();" onreset="clearErrors();">
+
+  <label>Name:</label>
+  <input type="text" id="name">
+  <p id="nameErr" style="color:red;"></p>
+  <br>
+
+  <label>Email:</label>
+  <input type="text" id="email">
+  <p id="emailErr" style="color:red;"></p>
+  <br>
+
+  <label>Gender:</label><br>
+  <input type="radio" name="gender" id="male"> Male
+  <input type="radio" name="gender" id="female"> Female
+  <input type="radio" name="gender" id="other"> Other
+  <p id="genderErr" style="color:red;"></p>
+  <br>
+
+  <label>Date of Birth:</label>
+  <input type="date" id="dob">
+  <p id="dobErr" style="color:red;"></p>
+  <br>
+
+  <label>Degree:</label><br>
+  <input type="checkbox" id="ssc"> SSC
+  <input type="checkbox" id="hsc"> HSC
+  <input type="checkbox" id="bsc"> BSc
+  <p id="degErr" style="color:red;"></p>
+  <br>
+
+  <label>Blood Group:</label>
+  <select id="blood">
+    <option value="">Select Blood Group</option>
+    <option value="A+">A+</option>
+    <option value="A-">A-</option>
+    <option value="B+">B+</option>
+    <option value="B-">B-</option>
+    <option value="O+">O+</option>
+    <option value="O-">O-</option>
+    <option value="AB+">AB+</option>
+    <option value="AB-">AB-</option>
+  </select>
+  <p id="bloodErr" style="color:red;"></p>
+  <br>
+
+  <label>User ID:</label>
+  <input type="text" id="userid">
+  <br><br>
+
+  <label>Photo:</label>
+  <input type="file" id="picture" accept="image/*">
+  <p id="picErr" style="color:red;"></p>
+  <br>
+
+  <input type="submit" value="Submit">
+  <input type="reset" value="Reset">
+</form>
+
+<!-- place for success message -->
+<p id="successMsg" style="color:green; font-weight:600;"></p>
+
+<script>
+function validateForm() {
+  // clear any previous success message
+  document.getElementById("successMsg").textContent = "";
+
+  let valid = true;
+
+  // Name
+  let name = document.getElementById("name").value.trim();
+  let nameErr = document.getElementById("nameErr");
+  let namePattern = /^[A-Za-z][A-Za-z.\-]*(\s+[A-Za-z][A-Za-z.\-]*)+$/;
+  if (!namePattern.test(name)) {
+    nameErr.innerHTML = " Enter a valid full name (at least two words, start with a letter).";
+    valid = false;
+  } else nameErr.innerHTML = "";
+
+  // Email
+  let email = document.getElementById("email").value.trim();
+  let emailErr = document.getElementById("emailErr");
+  let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    emailErr.innerHTML = " Invalid email.";
+    valid = false;
+  } else emailErr.innerHTML = "";
+
+  // Gender
+  let genderErr = document.getElementById("genderErr");
+  if (
+    !document.getElementById("male").checked &&
+    !document.getElementById("female").checked &&
+    !document.getElementById("other").checked
+  ) {
+    genderErr.innerHTML = " Select gender.";
+    valid = false;
+  } else genderErr.innerHTML = "";
+
+  // DOB
+  let dob = document.getElementById("dob").value;
+  let dobErr = document.getElementById("dobErr");
+  let today = new Date();
+  let selected = dob ? new Date(dob) : null;
+  if (dob === "" || !(selected instanceof Date) || isNaN(selected.getTime()) || selected > today) {
+    dobErr.innerHTML = " Enter a valid DOB (not in the future).";
+    valid = false;
+  } else dobErr.innerHTML = "";
+
+  // Degree (at least one)
+  let degErr = document.getElementById("degErr");
+  if (
+    !document.getElementById("ssc").checked &&
+    !document.getElementById("hsc").checked &&
+    !document.getElementById("bsc").checked 
+  ) {
+    degErr.innerHTML = " Select at least one degree.";
+    valid = false;
+  } else degErr.innerHTML = "";
+
+  // Blood group
+  let blood = document.getElementById("blood").value;
+  let bloodErr = document.getElementById("bloodErr");
+  if (blood === "") {
+    bloodErr.innerHTML = " Select blood group.";
+    valid = false;
+  } else bloodErr.innerHTML = "";
+
+  // User ID and Picture
+  let userid = document.getElementById("userid").value.trim();
+  let pictureInput = document.getElementById("picture");
+  let picture = pictureInput.value; // this is fine for checking selected file in browser
+  let picErr = document.getElementById("picErr");
+
+  if (userid === "" || isNaN(userid) || Number(userid) <= 0) {
+    picErr.innerHTML = " Enter a valid positive User ID.";
+    valid = false;
+  } else if (picture === "") {
+    picErr.innerHTML = " Select a picture.";
+    valid = false;
+  } else picErr.innerHTML = "";
+
+  if (!valid) {
+    // don't submit — show errors
+    return false;
+  }
+
+  
+  document.getElementById("successMsg").textContent = "Form validated successfully ✅";
+  return false;
+}
+
+function clearErrors() {
+  document.getElementById("nameErr").innerHTML = "";
+  document.getElementById("emailErr").innerHTML = "";
+  document.getElementById("genderErr").innerHTML = "";
+  document.getElementById("dobErr").innerHTML = "";
+  document.getElementById("degErr").innerHTML = "";
+  document.getElementById("bloodErr").innerHTML = "";
+  document.getElementById("picErr").innerHTML = "";
+  document.getElementById("successMsg").textContent = "";
+}
+</script>
+
+</body>
+</html>
