@@ -1,0 +1,107 @@
+<html>
+<head>
+    <title>Type Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .input-row, .saved-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        input, select { padding: 6px; }
+        button { padding: 6px 12px; }
+        #savedContainer { display: flex; flex-direction: column; gap: 5px; }
+        .saved-row input { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+ 
+<h2>Text & Type Input Form</h2>
+ 
+<!-- Input row (always visible) -->
+<div class="input-row" id="inputRow">
+    <input type="text" id="textInput" placeholder="Type something">
+    <select id="typeSelect">
+        <option value="">Select type</option>
+        <option value="Name">Name</option>
+        <option value="Address">Address</option>
+        <option value="Title">Title</option>
+    </select>
+    <button id="addBtn">Add</button>
+</div>
+ 
+<!-- Saved entries -->
+<div id="savedContainer"></div>
+ 
+<!-- Save Button -->
+<div id="saveContainer">
+    <button id="saveBtn">Save</button>
+</div>
+ 
+<!-- Display Result -->
+<div id="result"></div>
+ 
+<script>
+const textInput = document.getElementById("textInput");
+const typeSelect = document.getElementById("typeSelect");
+const addBtn = document.getElementById("addBtn");
+const savedContainer = document.getElementById("savedContainer");
+const saveBtn = document.getElementById("saveBtn");
+ 
+const maxEntries = 6;
+let currentCount = 0;
+ 
+addBtn.addEventListener("click", () => {
+    const textVal = textInput.value.trim();
+    const typeVal = typeSelect.value.trim();
+ 
+    if (textVal === "" || typeVal === "") {
+        alert("Both text and type must be provided.");
+        return;
+    }
+ 
+    if (currentCount >= maxEntries) {
+        alert(`Maximum of ${maxEntries} entries allowed.`);
+        return;
+    }
+ 
+    // Create saved row (Type first, Text second)
+    const savedRow = document.createElement("div");
+    savedRow.className = "saved-row";
+ 
+    const typeBox = document.createElement("input");
+    typeBox.type = "text";
+    typeBox.value = typeVal;
+    typeBox.disabled = true;
+ 
+    const textBox = document.createElement("input");
+    textBox.type = "text";
+    textBox.value = textVal;
+    textBox.disabled = true;
+ 
+    savedRow.appendChild(typeBox); // Type first
+    savedRow.appendChild(textBox); // Text second
+    savedContainer.appendChild(savedRow);
+ 
+    // Clear input row for next entry
+    textInput.value = "";
+    typeSelect.value = "";
+ 
+    currentCount++;
+});
+ 
+saveBtn.addEventListener("click", () => {
+    const rows = savedContainer.querySelectorAll(".saved-row");
+    const rowValues = [];
+ 
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll("input");
+        if (inputs.length === 2) {
+            rowValues.push({ type: inputs[0].value, text: inputs[1].value });
+        }
+    });
+ 
+    let resultHTML = rowValues.map((r,i) => `Row ${i+1}: Type: ${r.type}, Text: ${r.text}`).join("<br>");
+ 
+    document.getElementById("result").innerHTML = `<h3>Saved Data:</h3>${resultHTML}`;
+});
+</script>
+ 
+</body>
+</html>
